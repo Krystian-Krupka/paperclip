@@ -2,23 +2,23 @@ version: "3.9"
 
 services:
   paperclip:
-    image: node:20
-    container_name: paperclip
-    working_dir: /app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      HOST: 0.0.0.0
+      PAPERCLIP_HOME: /paperclip
+      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET}
+      PAPERCLIP_AGENT_JWT_SECRET: ${PAPERCLIP_AGENT_JWT_SECRET}
     ports:
       - "3100:3100"
-    environment:
-      - HOST=0.0.0.0
-      - PAPERCLIP_HOME=/paperclip
-      - BETTER_AUTH_SECRET=paperclip-dev-secret
-      - PAPERCLIP_AGENT_JWT_SECRET=paperclip-dev-secret
     volumes:
-      - .:/app
       - paperclip_data:/paperclip
+    restart: unless-stopped
     command: >
       bash -lc "
       corepack enable &&
-      corepack prepare pnpm@latest --activate &&
+      corepack prepare pnpm@9 --activate &&
       pnpm install &&
       pnpm dev
       "
