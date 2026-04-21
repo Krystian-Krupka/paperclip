@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   paperclip:
     build:
@@ -8,20 +6,12 @@ services:
     environment:
       HOST: 0.0.0.0
       PAPERCLIP_HOME: /paperclip
-      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET}
-      PAPERCLIP_AGENT_JWT_SECRET: ${PAPERCLIP_AGENT_JWT_SECRET}
+      BETTER_AUTH_SECRET: paperclip-dev-secret
+      PAPERCLIP_AGENT_JWT_SECRET: paperclip-dev-secret
     ports:
       - "3100:3100"
     volumes:
       - paperclip_data:/paperclip
-    restart: unless-stopped
-    command: >
-      bash -lc "
-      corepack enable &&
-      corepack prepare pnpm@9 --activate &&
-      pnpm install &&
-      pnpm dev
-      "
 
 volumes:
   paperclip_data:
